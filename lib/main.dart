@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:partner_flutter_app/screens/home/home_screen.dart';
+import 'package:partner_flutter_app/screens/home/process_home_screen.dart';
 import 'package:partner_flutter_app/screens/login/login_screen.dart';
 import 'package:partner_flutter_app/screens/spalsh/spalsh_screen.dart';
 import 'package:partner_flutter_app/state/order_item_state.dart';
 import 'package:partner_flutter_app/state/partner_details_state.dart';
-import 'package:partner_flutter_app/state/process_state.dart';
-import 'package:partner_flutter_app/state/rfq_partner_price_state.dart';
+import 'package:partner_flutter_app/state/order_process_state.dart';
+import 'package:partner_flutter_app/state/process_rfq_state.dart';
 import 'package:partner_flutter_app/state/user_state.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:provider/provider.dart';
@@ -20,9 +20,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (ctx) => UserState()),
-        ChangeNotifierProvider(create: (ctx) => ProcessState()),
+        ChangeNotifierProvider(create: (ctx) => OrderProcessState()),
         ChangeNotifierProvider(create: (ctx) => OrderItemState()),
-        ChangeNotifierProvider(create: (ctx) => RfqPartnerPriceState()),
+        ChangeNotifierProvider(create: (ctx) => ProcessRFQState()),
         ChangeNotifierProvider(create: (ctx) => PartnerState()),
       ],
       child: MaterialApp(

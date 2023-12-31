@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:partner_flutter_app/screens/home/home_screen.dart';
+import 'package:partner_flutter_app/screens/home/process_home_screen.dart';
 import 'package:partner_flutter_app/screens/login/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -20,23 +21,23 @@ class _SplashScreenState extends State<SplashScreen> {
       navigate();
     });
   }
-void navigate() async {
-  await storage.ready;
 
-  if (storage.getItem('token') == null ||
-      storage.getItem('token').toString().isEmpty) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-    );
-  } else {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-    );
+  void navigate() async {
+    await storage.ready;
+
+    if (storage.getItem('token') == null ||
+        storage.getItem('token').toString().isEmpty) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:partner_flutter_app/state/process_state.dart';
+import 'package:partner_flutter_app/state/order_process_state.dart';
 
 class ProductSearch extends SearchDelegate<String> {
   Future _scanBarcode(BuildContext context) async {
@@ -48,7 +48,7 @@ class ProductSearch extends SearchDelegate<String> {
     );
   }
 
- /* @override
+  /* @override
   Widget buildResults(BuildContext context) {
     //The results shown after the user submits a search from the search page.
   }*/
@@ -56,7 +56,7 @@ class ProductSearch extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     //Create suggestions, to be shown in the body of the search page while the user types a query into the search field.
-    final data = Provider.of<ProcessState>(context).orderProcessList;
+    final data = Provider.of<OrderProcessState>(context).orderProcessList;
     final productNames = data;
     final products = query.isEmpty
         ? productNames

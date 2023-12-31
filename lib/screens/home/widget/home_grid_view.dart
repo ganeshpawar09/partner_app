@@ -29,7 +29,8 @@ class HomeScreenGridView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(item.title,
-                    style: AppStyles.mondaN.copyWith(fontSize: 18)),
+                    textAlign: TextAlign.center,
+                    style: AppStyles.mondaN.copyWith(fontSize: 17)),
                 const SizedBox(
                   height: 20,
                 ),

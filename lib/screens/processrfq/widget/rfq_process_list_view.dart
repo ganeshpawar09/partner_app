@@ -1,23 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import 'package:partner_flutter_app/models/combine_model.dart';
 import 'package:partner_flutter_app/screens/const/font.dart';
-import 'package:partner_flutter_app/screens/process/process_update.dart';
+import 'package:partner_flutter_app/screens/processrfq/rfq_detail.dart';
 
-class OrderProcessListView extends StatelessWidget {
-  final OrderProcess orderProcess;
-  const OrderProcessListView({
+class RFQProcessListView extends StatelessWidget {
+  final ProcessRFQ processRFQ;
+  const RFQProcessListView({
     Key? key,
-    required this.orderProcess,
+    required this.processRFQ,
   }) : super(key: key);
-
-  String processDate(String dateString) {
-    DateTime dateTime = DateTime.parse(dateString);
-    String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
-    return formattedDate;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,48 +26,36 @@ class OrderProcessListView extends StatelessWidget {
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('Process id: ${orderProcess.id}',
-                        style: AppStyles.mondaB.copyWith(fontSize: 20)),
-                    // Text(processDate(orderProcess.startDate.toString()),
-                    //     style: AppStyles.mondaN.copyWith(fontSize: 16)),
+                    Text('Process Id: ${processRFQ.process!.processId}',
+                        style: AppStyles.mondaB.copyWith(fontSize: 18)),
                   ]),
               const SizedBox(
                 height: 8,
               ),
-              Row(
-                children: [
-                  Text("Process Name:",
-                      style: AppStyles.mondaN
-                          .copyWith(fontSize: 15, color: Colors.black54)),
-                  Text(orderProcess.processName!,
-                      style: AppStyles.mondaB.copyWith(fontSize: 16)),
-                ],
-              ),
+              customRow("Process Name: ", "${processRFQ.process!.processName}"),
               const SizedBox(
                 height: 8,
               ),
-              Row(
-                children: [
-                  Text("Price: ",
-                      style: AppStyles.mondaN
-                          .copyWith(fontSize: 15, color: Colors.black54)),
-                  Text(orderProcess.cost.toString(),
-                      style: AppStyles.mondaB.copyWith(fontSize: 16)),
-                ],
+              customRow("Target Cost: ", "${processRFQ.process!.targetCost}"),
+              const SizedBox(
+                height: 8,
               ),
+              (processRFQ.rfqCost != 0.00)
+                  ? customRow("Your Offer: ", "${processRFQ.rfqCost}")
+                  : const SizedBox(),
               const SizedBox(
                 height: 8,
               ),
               Text("Status:",
                   style: AppStyles.mondaN
                       .copyWith(fontSize: 16, color: Colors.black54)),
-              orderProcess.completed!
+              processRFQ.rfqCost != 0.00
                   ? Text(
-                      ('Completed'),
+                      ('Offer Given'),
                       style: AppStyles.mondaB
                           .copyWith(fontSize: 18, color: Colors.green),
                     )
-                  : Text(('Not Completed'),
+                  : Text(('Offer Left'),
                       style: AppStyles.mondaB
                           .copyWith(fontSize: 18, color: Colors.red)),
               Row(children: <Widget>[
@@ -91,8 +71,9 @@ class OrderProcessListView extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            ProcessUpdateScreen(id: orderProcess.id!),
+                        builder: (context) => RFQDetailScreen(
+                          processRFQ: processRFQ,
+                        ),
                       ),
                     );
                   },
@@ -108,4 +89,15 @@ class OrderProcessListView extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget customRow(String title, String value) {
+  return Row(
+    children: [
+      Text(title,
+          style:
+              AppStyles.mondaN.copyWith(fontSize: 15, color: Colors.black54)),
+      Text(value, style: AppStyles.mondaB.copyWith(fontSize: 16)),
+    ],
+  );
 }

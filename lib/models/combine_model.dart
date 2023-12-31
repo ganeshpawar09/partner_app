@@ -95,7 +95,7 @@ class ErpOrderItem {
   MaterialDetail? materialDetail;
   ManufacturingCapabilities? manufacturingTech;
   MaterialVendor? materialVendorcode;
-  List<Process>? process;
+  List<OrderProcess>? process;
   List<Movement>? movement;
 
   ErpOrderItem(
@@ -161,9 +161,9 @@ class ErpOrderItem {
         ? MaterialVendor.fromJson(json['material_vendorcode'])
         : null;
     if (json['process'] != null) {
-      process = <Process>[];
+      process = <OrderProcess>[];
       json['process'].forEach((v) {
-        process!.add(Process.fromJson(v));
+        process!.add(OrderProcess.fromJson(v));
       });
     }
     if (json['movement'] != null) {
@@ -313,7 +313,7 @@ class Document {
   }
 }
 
-class Process {
+class OrderProcess {
   int? id;
   int? srNo;
   String? processName;
@@ -336,7 +336,7 @@ class Process {
   VendorDetail? vendorcode;
   PaymentDetails? paymentDetails;
 
-  Process(
+  OrderProcess(
       {this.id,
       this.srNo,
       this.processName,
@@ -359,7 +359,7 @@ class Process {
       this.vendorcode,
       this.paymentDetails});
 
-  Process.fromJson(Map<String, dynamic> json) {
+  OrderProcess.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     srNo = json['sr_no'];
     processName = json['process_name'];
@@ -842,119 +842,6 @@ class MaterialDetail {
   }
 }
 
-class OrderProcess {
-  int? id;
-  int? srNo;
-  String? processName;
-  String? processId;
-  String? barcodeLink;
-  String? barcodeImg;
-  String? processBill;
-  double? targetCost;
-  double? cost;
-  double? incTaxCost;
-  String? processPartFile;
-  String? processDrawing;
-  String? startDate;
-  String? endDate;
-  bool? completed;
-  String? woDate;
-  bool? rfqVendorBool;
-  bool? reviewed;
-  bool? proceed;
-  ManufacturingCapabilities? manufacturingCapabilities;
-  VendorDetail? vendorDetail;
-  PaymentDetails? paymentDetails;
-
-  OrderProcess(
-      {this.id,
-      this.srNo,
-      this.processName,
-      this.processId,
-      this.barcodeLink,
-      this.barcodeImg,
-      this.processBill,
-      this.targetCost,
-      this.cost,
-      this.incTaxCost,
-      this.processPartFile,
-      this.processDrawing,
-      this.startDate,
-      this.endDate,
-      this.completed,
-      this.woDate,
-      this.rfqVendorBool,
-      this.reviewed,
-      this.proceed,
-      this.manufacturingCapabilities,
-      this.vendorDetail,
-      this.paymentDetails});
-
-  OrderProcess.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    srNo = json['sr_no'];
-    processName = json['process_name'];
-    processId = json['process_id'];
-    barcodeLink = json['barcode_link'];
-    barcodeImg = json['barcode_img'];
-    processBill = json['process_bill'];
-    targetCost = json['target_cost'];
-    cost = json['cost'];
-    incTaxCost = json['inc_tax_cost'];
-    processPartFile = json['process_part_file'];
-    processDrawing = json['process_drawing'];
-    startDate = json['start_date'];
-    endDate = json['end_date'];
-    completed = json['completed'];
-    woDate = json['wo_date'];
-    rfqVendorBool = json['rfq_vendor_bool'];
-    reviewed = json['reviewed'];
-    proceed = json['proceed'];
-    manufacturingCapabilities = json['manufacturing_capabilities'] != null
-        ? ManufacturingCapabilities.fromJson(json['manufacturing_capabilities'])
-        : null;
-    vendorDetail = json['vendor_detail'] != null
-        ? VendorDetail.fromJson(json['vendor_detail'])
-        : null;
-    paymentDetails = json['payment_details'] != null
-        ? PaymentDetails.fromJson(json['payment_details'])
-        : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['sr_no'] = srNo;
-    data['process_name'] = processName;
-    data['process_id'] = processId;
-    data['barcode_link'] = barcodeLink;
-    data['barcode_img'] = barcodeImg;
-    data['process_bill'] = processBill;
-    data['target_cost'] = targetCost;
-    data['cost'] = cost;
-    data['inc_tax_cost'] = incTaxCost;
-    data['process_part_file'] = processPartFile;
-    data['process_drawing'] = processDrawing;
-    data['start_date'] = startDate;
-    data['end_date'] = endDate;
-    data['completed'] = completed;
-    data['wo_date'] = woDate;
-    data['rfq_vendor_bool'] = rfqVendorBool;
-    data['reviewed'] = reviewed;
-    data['proceed'] = proceed;
-    if (manufacturingCapabilities != null) {
-      data['manufacturing_capabilities'] = manufacturingCapabilities!.toJson();
-    }
-    if (vendorDetail != null) {
-      data['vendor_detail'] = vendorDetail!.toJson();
-    }
-    if (paymentDetails != null) {
-      data['payment_details'] = paymentDetails!.toJson();
-    }
-    return data;
-  }
-}
-
 class MaterialVendor {
   String? vendorCode;
   String? companyName;
@@ -1047,15 +934,15 @@ class MaterialVendor {
   }
 }
 
-class RfqPartnerPrice {
+class ProcessRFQ {
   int? id;
   double? rfqCost;
   bool? whatappAlert;
   VendorDetail? vendor;
   MaterialVendor? materialVendor;
-  Process? process;
+  OrderProcess? process;
 
-  RfqPartnerPrice(
+  ProcessRFQ(
       {this.id,
       this.rfqCost,
       this.whatappAlert,
@@ -1063,32 +950,32 @@ class RfqPartnerPrice {
       this.materialVendor,
       this.process});
 
-  RfqPartnerPrice.fromJson(Map<String, dynamic> json) {
+  ProcessRFQ.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     rfqCost = json['rfq_cost'];
     whatappAlert = json['whatapp_alert'];
     vendor =
-        json['vendor'] != null ?  VendorDetail.fromJson(json['vendor']) : null;
+        json['vendor'] != null ? VendorDetail.fromJson(json['vendor']) : null;
     materialVendor = json['material_vendor'] != null
-        ?  MaterialVendor.fromJson(json['material_vendor'])
+        ? MaterialVendor.fromJson(json['material_vendor'])
         : null;
     process =
-        json['process'] != null ?  Process.fromJson(json['process']) : null;
+        json['process'] != null ? OrderProcess.fromJson(json['process']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['rfq_cost'] = this.rfqCost;
-    data['whatapp_alert'] = this.whatappAlert;
-    if (this.vendor != null) {
-      data['vendor'] = this.vendor!.toJson();
+    data['id'] = id;
+    data['rfq_cost'] = rfqCost;
+    data['whatapp_alert'] = whatappAlert;
+    if (vendor != null) {
+      data['vendor'] = vendor!.toJson();
     }
-    if (this.materialVendor != null) {
-      data['material_vendor'] = this.materialVendor!.toJson();
+    if (materialVendor != null) {
+      data['material_vendor'] = materialVendor!.toJson();
     }
-    if (this.process != null) {
-      data['process'] = this.process!.toJson();
+    if (process != null) {
+      data['process'] = process!.toJson();
     }
     return data;
   }

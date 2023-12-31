@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:partner_flutter_app/models/combine_model.dart';
-import 'package:partner_flutter_app/screens/home/Process_home_screen.dart';
-import 'package:partner_flutter_app/screens/process/widget/process_list_view.dart';
 import 'package:partner_flutter_app/screens/const/font.dart';
-import 'package:partner_flutter_app/state/order_process_state.dart';
-import 'package:partner_flutter_app/state/process_vedor_state.dart';
-import 'package:partner_flutter_app/widgets/skeleton_tabbar_view.dart';
+import 'package:partner_flutter_app/screens/home/process_home_screen.dart';
+import 'package:partner_flutter_app/screens/processrfq/widget/rfq_process_list_view.dart';
+import 'package:partner_flutter_app/state/process_rfq_state.dart';
 import 'package:provider/provider.dart';
 
-class ProcessScreen extends StatelessWidget {
-  const ProcessScreen({Key? key}) : super(key: key);
+class RFQScreen extends StatelessWidget {
+  const RFQScreen({Key? key}) : super(key: key);
 
-  Future<List<OrderProcess>> fetchData(BuildContext context) async {
+  Future<List<ProcessRFQ>> fetchData(BuildContext context) async {
     try {
       print('Before fetching data');
-      if (!ProcessDataFetchStatus.processDataIsFetched) {
-        await context.read<OrderProcessState>().getOrderProcessList();
+      if (!ProcessDataFetchStatus.rfqProcessDataIsFetched) {
+        await context.read<ProcessRFQState>().getProcessRFQlists();
 
-        ProcessDataFetchStatus.processDataIsFetched = true;
+        ProcessDataFetchStatus.rfqProcessDataIsFetched = true;
       }
 
       print('After fetching data');
@@ -27,18 +25,18 @@ class ProcessScreen extends StatelessWidget {
 
     if (context.mounted) {
       print('Returning orderProcessList');
-      return context.read<OrderProcessState>().orderProcessList;
+      return context.read<ProcessRFQState>().processRFQList;
     }
 
     return [];
   }
 
   void refresh(BuildContext context) {
-    ProcessDataFetchStatus.processDataIsFetched = false;
+    ProcessDataFetchStatus.rfqProcessDataIsFetched = false;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => ProcessScreen(),
+        builder: (context) => RFQScreen(),
       ),
     );
   }
@@ -46,30 +44,14 @@ class ProcessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            "View Process",
+            "View RFQ Process",
             style: AppStyles.mondaB.copyWith(fontSize: 22),
           ),
-
-          // leading: Builder(
-          //   builder: (BuildContext context) {
-          //     return IconButton(
-          //       icon: const Icon(
-          //         Icons.menu,
-          //         color: Colors.black,
-          //         size: 30,
-          //       ),
-          //       onPressed: () {
-          //         Scaffold.of(context).openDrawer();
-          //       },
-          //     );
-          //   },
-          // ),
           bottom: TabBar(
-            labelPadding: EdgeInsets.symmetric(horizontal: 1),
             indicatorColor: Colors.black,
             labelColor: Colors.black,
             dividerColor: Colors.white,
@@ -77,13 +59,10 @@ class ProcessScreen extends StatelessWidget {
             tabs: [
               Tab(
                   text:
-                      '(${context.watch<OrderProcessState>().orderProcessList.length}) Total'),
+                      'Offer Left (${context.watch<ProcessRFQState>().notOfferProcessRFQList.length})'),
               Tab(
                   text:
-                      '(${context.watch<OrderProcessState>().orderProcessPendingList.length}) Pending'),
-              Tab(
-                  text:
-                      ' (${context.watch<OrderProcessState>().orderProcessCompletedList.length}) Completed'),
+                      'Offer Given (${context.watch<ProcessRFQState>().offerProcessRFQList.length})'),
             ],
           ),
           actions: [
@@ -104,12 +83,14 @@ class ProcessScreen extends StatelessWidget {
             )
           ],
         ),
-        // drawer: AppDrawer(),
-        body: FutureBuilder<List<OrderProcess>>(
+        body: FutureBuilder<List<ProcessRFQ>>(
           future: fetchData(context),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SkeletonTabbarView();
+              return const Center(
+                  child: CircularProgressIndicator(
+                color: Colors.black,
+              ));
             } else if (snapshot.hasError || !snapshot.hasData) {
               return Center(
                 child: Column(
@@ -136,25 +117,17 @@ class ProcessScreen extends StatelessWidget {
             } else {
               return TabBarView(
                 children: [
-                  Consumer<OrderProcessState>(
+                  Consumer<ProcessRFQState>(
                     builder: (context, provider, child) => OrderProcessTab(
-                      data: provider.orderProcessList,
+                      data: provider.notOfferProcessRFQList,
                       refreshFunction: () {
                         refresh(context);
                       },
                     ),
                   ),
-                  Consumer<OrderProcessState>(
+                  Consumer<ProcessRFQState>(
                     builder: (context, provider, child) => OrderProcessTab(
-                      data: provider.orderProcessPendingList,
-                      refreshFunction: () {
-                        refresh(context);
-                      },
-                    ),
-                  ),
-                  Consumer<OrderProcessState>(
-                    builder: (context, provider, child) => OrderProcessTab(
-                      data: provider.orderProcessCompletedList,
+                      data: provider.offerProcessRFQList,
                       refreshFunction: () {
                         refresh(context);
                       },
@@ -171,7 +144,7 @@ class ProcessScreen extends StatelessWidget {
 }
 
 class OrderProcessTab extends StatelessWidget {
-  final List<OrderProcess> data;
+  final List<ProcessRFQ> data;
   final VoidCallback refreshFunction;
 
   const OrderProcessTab(
@@ -189,9 +162,8 @@ class OrderProcessTab extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: ListView.builder(
           itemCount: data.length,
-          itemBuilder: (BuildContext context, int index) =>
-              OrderProcessListView(
-            orderProcess: data[index],
+          itemBuilder: (BuildContext context, int index) => RFQProcessListView(
+            processRFQ: data[index],
           ),
         ),
       ),

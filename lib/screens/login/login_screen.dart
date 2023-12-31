@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:partner_flutter_app/screens/const/font.dart';
-import 'package:provider/provider.dart';
 import 'package:partner_flutter_app/screens/home/home_screen.dart';
+import 'package:provider/provider.dart';
 import 'package:partner_flutter_app/state/user_state.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
-
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
